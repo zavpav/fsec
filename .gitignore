@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/ChechProfanity/bin/Debug/netcoreapp3.1
+/src/ChechProfanity/obj
+/src/ProfanityListServices/bin/Debug/netcoreapp3.1
+/src/ProfanityListServices/obj/Debug/netcoreapp3.1
+/src/ProfanityListServices/obj
+/test/CheckProfanity.Tests/bin/Debug/netcoreapp3.1
+/test/CheckProfanity.Tests/obj
