@@ -1,0 +1,4 @@
+POST http://localhost:5000/profanity?exectionDetail=Detailed
+Content-Type: text/plain
+
+< HasMyDefaultProfanity.txt
