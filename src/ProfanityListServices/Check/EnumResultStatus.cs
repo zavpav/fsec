@@ -1,4 +1,4 @@
-﻿namespace CheckProfanity
+﻿namespace ProfanityList.Check
 {
     /// <summary> Processing result </summary>
     public enum EnumResultStatus

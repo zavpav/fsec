@@ -1,4 +1,4 @@
-﻿namespace CheckProfanity
+﻿namespace ProfanityList.Check
 {
     /// <summary> Required execute detail </summary>
     public enum EnumExecuteDetail

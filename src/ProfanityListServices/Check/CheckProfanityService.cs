@@ -5,29 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using ProfanityList.WordList;
 
-using Amazon.Lambda.Core;
-using Microsoft.VisualBasic.CompilerServices;
-using ProfanityList;
-
-// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
-
-namespace CheckProfanity
+namespace ProfanityList.Check
 {
-    public class Function
+    public class CheckProfanityService
     {
         private long MAX_FILE_LEN = 10000;
 
         private IProfanityListService ProfanityListService { get; set; }
 
-        public Function()
-        {
-            this.ProfanityListService = new ProfanityListS3BucketService();
-        }
-
-        public Function(IProfanityListService profanityListService)
+        public CheckProfanityService(IProfanityListService profanityListService)
         {
             this.ProfanityListService = profanityListService;
         }
@@ -35,9 +23,8 @@ namespace CheckProfanity
         /// <summary> Profanity words checker </summary>
         /// <param name="inputStream">Income text in UTF-8 encoding</param>
         /// <param name="exectionDetail">Required execution detalization</param>
-        /// <param name="context">AWS context</param>
         /// <returns>Information about checking the inputStream text</returns>
-        public CheckProfanityResult CheckProfanityHandler(Stream inputStream, EnumExecuteDetail exectionDetail, ILambdaContext context)
+        public CheckProfanityResult CheckProfanity(Stream inputStream, EnumExecuteDetail exectionDetail)
         {
             var executeSw = Stopwatch.StartNew();
             

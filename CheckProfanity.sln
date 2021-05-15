@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{0232E09A-AA3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{428E3263-46FF-425C-8449-B90733FA0CF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckProfanity", "src\ChechProfanity\CheckProfanity.csproj", "{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckProfanityAwsLambda", "src\ChechProfanity\CheckProfanityAwsLambda.csproj", "{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckProfanityKrestel", "src\CheckProfanityKrestel\CheckProfanityKrestel.csproj", "{91C84743-56C1-461D-A7E5-8C5CB65F419C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C84743-56C1-461D-A7E5-8C5CB65F419C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C84743-56C1-461D-A7E5-8C5CB65F419C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C84743-56C1-461D-A7E5-8C5CB65F419C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C84743-56C1-461D-A7E5-8C5CB65F419C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{38920A74-57BB-4BF2-B348-34791B8F0EBB} = {428E3263-46FF-425C-8449-B90733FA0CF4}
 		{2444F8E3-FF0E-4BE5-9B7F-47DFAE03CD8A} = {0232E09A-AA3E-4F9C-996C-AF944CA27C4F}
 		{05B72D0B-4F75-499D-92C4-7A2B1168BA6E} = {0232E09A-AA3E-4F9C-996C-AF944CA27C4F}
+		{91C84743-56C1-461D-A7E5-8C5CB65F419C} = {0232E09A-AA3E-4F9C-996C-AF944CA27C4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53EECF09-2E12-4B45-A132-DA6B86ADEA66}

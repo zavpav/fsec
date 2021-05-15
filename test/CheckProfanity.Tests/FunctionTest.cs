@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using Xunit;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
+using ProfanityList.Check;
 
 
 namespace CheckProfanity.Tests
@@ -19,12 +17,12 @@ namespace CheckProfanity.Tests
         {
             var context = new TestLambdaContext();
             var profanityList = new ProfanityListServiceStub(new List<string> { "ah", "oh", "eh" });
-            var function = new Function(profanityList);
+            var function = new CheckProfanityService(profanityList);
 
             var errText = "ah oh uh oh";
             var stream = this.GetStream(errText);
 
-            var res = function.CheckProfanityHandler(stream, EnumExecuteDetail.Verbosity, context);
+            var res = function.CheckProfanity(stream, EnumExecuteDetail.Verbosity);
             
             Assert.Equal(EnumResultStatus.TextHasProfanity, res.ResultStatus);
             Assert.Equal(3, res.CheckingLog.Count);
@@ -35,12 +33,12 @@ namespace CheckProfanity.Tests
 
             var context = new TestLambdaContext();
             var profanityList = new ProfanityListServiceStub(new List<string> { "ah", "oh", "eh" });
-            var function = new Function(profanityList);
+            var function = new CheckProfanityService(profanityList);
 
             var errText = "ah oh uh oh";
             var stream = this.GetStream(errText);
 
-            var res = function.CheckProfanityHandler(stream, EnumExecuteDetail.Detailed, context);
+            var res = function.CheckProfanity(stream, EnumExecuteDetail.Detailed);
 
             Assert.Equal(EnumResultStatus.TextHasProfanity, res.ResultStatus);
             Assert.Equal(3, res.ProfanityMessagesCount);

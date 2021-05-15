@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ProfanityList
+namespace ProfanityList.WordList
 {
     /// <summary>
     /// Service for administrating a profanity word list

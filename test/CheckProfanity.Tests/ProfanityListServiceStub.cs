@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ProfanityList;
+using ProfanityList.WordList;
 
 namespace CheckProfanity.Tests
 {

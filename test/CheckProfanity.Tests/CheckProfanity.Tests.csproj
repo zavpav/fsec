@@ -10,6 +10,6 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ChechProfanity\CheckProfanity.csproj" />
+    <ProjectReference Include="..\..\src\ChechProfanity\CheckProfanityAwsLambda.csproj" />
   </ItemGroup>
 </Project>

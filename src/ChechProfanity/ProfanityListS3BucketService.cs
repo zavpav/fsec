@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ProfanityList.WordList;
 
-namespace ProfanityList
+namespace CheckProfanityAwsLambda
 {
     public class ProfanityListS3BucketService : IProfanityListService
     {

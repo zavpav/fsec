@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CheckProfanity
+namespace ProfanityList.Check
 {
     /// <summary> Information during check </summary>
     public class CheckLogInfo

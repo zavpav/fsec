@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CheckProfanity
+namespace ProfanityList.Check
 {
     /// <summary> Result of analyze </summary>
     public class CheckProfanityResult
