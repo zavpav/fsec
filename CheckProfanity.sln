@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{428E3263
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckProfanityAwsLambda", "src\ChechProfanity\CheckProfanityAwsLambda.csproj", "{05B72D0B-4F75-499D-92C4-7A2B1168BA6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckProfanityKrestel", "src\CheckProfanityKrestel\CheckProfanityKrestel.csproj", "{91C84743-56C1-461D-A7E5-8C5CB65F419C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheckProfanityKrestel", "src\CheckProfanityKrestel\CheckProfanityKrestel.csproj", "{91C84743-56C1-461D-A7E5-8C5CB65F419C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

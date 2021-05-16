@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
 using Amazon.Lambda.TestUtilities;
+using CheckProfanityAwsLambda;
 using ProfanityList.Check;
 
 
@@ -56,6 +57,26 @@ namespace CheckProfanity.Tests
             writer.Flush();
             stream.Position = 0;
             return stream;
+        }
+
+
+        [Fact]
+        public void TestGetMethod()
+        {
+            TestLambdaContext context;
+            APIGatewayProxyResponse response;
+
+            CheckFunction functions = new CheckFunction();
+
+            context = new TestLambdaContext();
+
+
+            //APIGatewayProxyRequest request;
+            //request = new APIGatewayProxyRequest();
+            //            response = functions.HealthHandle(request, context);
+            response = functions.HealthHandle(context);
+            Assert.Equal(200, response.StatusCode);
+            Assert.Equal("Hello AWS Serverless", response.Body);
         }
 
     }

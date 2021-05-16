@@ -15,7 +15,38 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ]
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/Check",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "Health" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.CheckFunction::HealthHandle",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Main health function",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/Health",
+              "Method": "GET"
+            }
+          }
+        }
       }
     },
     "BasketAddFunction" : {
@@ -28,7 +59,16 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ]
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/AddWord/{word}",
+              "Method": "GET"
+            }
+          }
+        }
       }
     },
     "BasketRemoveFunction" : {
@@ -41,7 +81,32 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ]
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/RemoveWord/{word}",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "ProffanityS3Backet" : {
+      "Type" : "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName" : "profanity.storage"
+      }
+
+    }
+
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Profanity/"
       }
     }
   }

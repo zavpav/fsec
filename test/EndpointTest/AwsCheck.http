@@ -1,0 +1,4 @@
+POST https://g6oo938vij.execute-api.us-east-1.amazonaws.com/Prod/Check?exectionDetail=Detailed
+Content-Type: text/plain
+
+< HasMyDefaultProfanity.txt

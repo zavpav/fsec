@@ -12,12 +12,12 @@ namespace CheckProfanityAwsLambda
 
         protected override void InternalAdd(string normalizedWord)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         protected override void InternalRemove(string normalizedWord)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }
