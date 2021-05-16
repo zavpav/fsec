@@ -11,5 +11,11 @@ namespace ProfanityList.WordList
         /// <returns></returns>
         IReadOnlyCollection<string> GetProfanityWordList();
 
+        /// <summary> Add word into the basket </summary>
+        BasketEditResult Add(string word);
+
+        /// <summary> Remove word into the basket </summary>
+        BasketEditResult Remove(string word);
+
     }
 }

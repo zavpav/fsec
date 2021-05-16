@@ -17,5 +17,25 @@ namespace CheckProfanity.Tests
         {
             return this._list;
         }
+
+        public BasketEditResult Add(string word)
+        {
+            return new BasketEditResult
+            {
+                Result = BasketEditResult.EnumResult.Ok,
+                Word = word,
+                Description = "Test"
+            };
+        }
+
+        public BasketEditResult Remove(string word)
+        {
+            return new BasketEditResult
+            {
+                Result = BasketEditResult.EnumResult.Ok,
+                Word = word,
+                Description = "Test"
+            };
+        }
     }
 }
