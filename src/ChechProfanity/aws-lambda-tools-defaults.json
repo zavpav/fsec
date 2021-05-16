@@ -1,16 +1,18 @@
+
 {
-  "Information": [
-    "Checking of profanity words"
-  ],
-  "profile": "default",
-  "region": "us-west-2",
-  "configuration": "Release",
-  "framework": "netcoreapp3.1",
-  "function-runtime": "dotnetcore3.1",
-  "function-memory-size": 256,
-  "function-timeout": 30,
-  "tem": "serverless.template",
-  "s3-bucket": "profanity.basket",
-  "stack-name": "TestStack",
-  "function-handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.CheckFunction::CheckProfanityHandler"
+    "Information" : [
+        "Checking of profanity words"
+    ],
+    "profile"     : "TestAws",
+    "region"      : "us-east-1",
+    "configuration" : "Release",
+    "framework"     : "netcoreapp3.1",
+    "function-runtime" : "dotnetcore3.1",
+    "function-memory-size" : 256,
+    "function-timeout"     : 30,
+    "tem"                  : "serverless.template",
+    "s3-bucket"            : "profanity.deploy1",
+    "stack-name"           : "TestStack",
+    "function-handler"     : "CheckProfanityAwsLambda::CheckProfanityAwsLambda.CheckFunction::CheckProfanityHandler",
+    "template"             : "serverless.template"
 }

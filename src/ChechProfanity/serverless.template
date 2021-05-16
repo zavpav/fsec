@@ -15,16 +15,7 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ],
-        "Events": {
-          "ProxyResource": {
-            "Type": "Api",
-            "Properties": {
-              "Path": "/{proxy+}",
-              "Method": "ANY"
-            }
-          }
-        }
+        "Policies": [ "AWSLambda_FullAccess" ]
       }
     },
     "BasketAddFunction" : {
@@ -52,12 +43,6 @@
         "Role": null,
         "Policies": [ "AWSLambda_FullAccess" ]
       }
-    }
-  },
-  "Outputs" : {
-    "ApiURL" : {
-        "Description" : "API endpoint URL for Prod environment",
-        "Value" : { "Fn::Sub" : "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
     }
   }
 }
