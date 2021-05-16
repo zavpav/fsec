@@ -12,3 +12,5 @@
 /test/CheckProfanity.Tests/obj
 /src/CheckProfanityKrestel/bin/Debug/netcoreapp3.1
 /src/CheckProfanityKrestel/obj
+/src/ChechProfanity/bin/Release/netcoreapp3.1
+/src/ProfanityListServices/bin/Release/netcoreapp3.1

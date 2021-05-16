@@ -1,0 +1,63 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Transform" : "AWS::Serverless-2016-10-31",
+  "Description" : "Starting template for an AWS Serverless Application.",
+  "Parameters" : {
+  },
+  "Resources" : {
+    "CheckFunction" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.CheckFunction::CheckProfanityHandler",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Main check function",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "ProxyResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{proxy+}",
+              "Method": "ANY"
+            }
+          }
+        }
+      }
+    },
+    "BasketAddFunction" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.BasketFunctions::BasketAddWordHandler",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Add word into basket",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [ "AWSLambda_FullAccess" ]
+      }
+    },
+    "BasketRemoveFunction" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.BasketFunctions::BasketRemoveWordHandler",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Add word into basket",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [ "AWSLambda_FullAccess" ]
+      }
+    }
+  },
+  "Outputs" : {
+    "ApiURL" : {
+        "Description" : "API endpoint URL for Prod environment",
+        "Value" : { "Fn::Sub" : "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
+    }
+  }
+}
