@@ -28,20 +28,11 @@ namespace CheckProfanityKrestel.Controllers
             return "OK";
         }
 
-        //[HttpPost]
-        //public CheckProfanityResult Post(Stream inputStream, EnumExecuteDetail exectionDetail)
-        //{
-        //    var profanityList = new ProfanityListXmlSample();
-        //    var service = new CheckProfanityService(profanityList);
-
-        //    return service.CheckProfanity(inputStream, exectionDetail);
-        //}
-        
         [HttpPost]
         [Produces("application/json")]
         public async Task<CheckProfanityResult> Post(EnumExecuteDetail exectionDetail)
         {
-            var profanityList = new ProfanityListXmlSample();
+            var profanityList = new ProfanityListInMemoryService();
             var service = new CheckProfanityService(profanityList);
             
             byte[] buf = new byte[(int)Request.ContentLength.Value];

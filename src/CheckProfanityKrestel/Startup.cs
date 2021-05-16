@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CheckProfanityKrestel.Lib;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProfanityList.WordList;
 
 namespace CheckProfanityKrestel
 {
@@ -24,8 +26,13 @@ namespace CheckProfanityKrestel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddNewtonsoftJson(); 
+            var basket = (IProfanityListService)new ProfanityListInMemoryService();
+            
+            services
+                .AddControllers()
+                .AddNewtonsoftJson();
+
+            services.AddSingleton<IProfanityListService>(basket);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
