@@ -9,7 +9,6 @@ namespace ProfanityList.WordList
     public interface IProfanityListService
     {
         /// <summary> Return all registred words </summary>
-        /// <returns></returns>
         Task<IReadOnlyCollection<string>> GetProfanityWordList();
 
         /// <summary> Add word into the basket </summary>
@@ -17,6 +16,5 @@ namespace ProfanityList.WordList
 
         /// <summary> Remove word into the basket </summary>
         Task<BasketEditResult> Remove(string word);
-
     }
 }

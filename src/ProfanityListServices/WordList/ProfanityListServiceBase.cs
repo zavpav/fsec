@@ -29,13 +29,11 @@ namespace ProfanityList.WordList
             return word.ToLower();
         }
 
-        /// <summary> List of words </summary>
         public Task<IReadOnlyCollection<string>> GetProfanityWordList()
         {
             return InternalCollection();
         }
 
-        /// <summary> Adding word </summary>
         public async Task<BasketEditResult> Add(string word)
         {
             var normWord = this.NormalizeWord(word);
