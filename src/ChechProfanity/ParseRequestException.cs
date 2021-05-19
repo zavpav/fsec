@@ -4,7 +4,7 @@ namespace CheckProfanityAwsLambda
 {
     public class ParseRequestException : Exception
     {
-        public ParseRequestException(string? message) : base(message)
+        public ParseRequestException(string message) : base(message)
         {
         }
     }

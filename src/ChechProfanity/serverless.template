@@ -14,7 +14,7 @@
         "Description": "Main check function",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess" ],
         "Events": {
           "RootGet": {
@@ -37,7 +37,7 @@
         "MemorySize": 256,
         "Timeout": 30,
         "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ],
+        "Policies": [ "AWSLambda_FullAccess", "AmazonRekognitionFullAccess" ],
         "Events": {
           "RootGet": {
             "Type": "Api",
@@ -58,8 +58,8 @@
         "Description": "Add word into basket",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
-        "Policies": [ "AWSLambda_FullAccess" ],
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Policies": [ "AWSLambda_FullAccess", "AmazonRekognitionFullAccess" ],
         "Events": {
           "RootGet": {
             "Type": "Api",
@@ -80,7 +80,7 @@
         "Description": "Add word into basket",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess" ],
         "Events": {
           "RootGet": {
@@ -93,14 +93,112 @@
         }
       }
     },
+    "BasketListWordFunction" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.BasketFunctions::BasketListWordHandler",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "List of words into basket",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Policies": [ "AWSLambda_FullAccess" ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/WordsList",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
     "ProffanityS3Backet" : {
       "Type" : "AWS::S3::Bucket",
       "Properties": {
         "BucketName" : "profanity.storage"
       }
-
-    }
-
+    },
+    "ProffanityS3BacketRole": {
+        "Type": "AWS::IAM::Role",
+        "Properties": {
+            "AssumeRolePolicyDocument" : {
+                "Version" : "2012-10-17",
+                "Statement" : [
+                    {
+                        "Action" : [
+                            "sts:AssumeRole"
+                        ],
+                        "Effect" : "Allow",
+                        "Principal" : {
+                            "Service" : [
+                                "lambda.amazonaws.com"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Policies" : [
+                {
+                    "PolicyName": "S3Access",
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                            {
+                              "Effect": "Allow",
+                              "Action": [
+                                    "*"
+                              ],
+                              "Resource": [{"Fn::GetAtt" : [ "ProffanityS3Backet", "Arn"]},
+                                    "arn:aws:s3:::profanity.storage/*"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "PolicyName": "WordTableAccess",
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:BatchGetItem",
+                                "dynamodb:DeleteItem",
+                                "dynamodb:DescribeTable",
+                                "dynamodb:GetItem",
+                                "dynamodb:PutItem",
+                                "dynamodb:Query",
+                                "dynamodb:Scan",
+                                "dynamodb:UpdateItem"
+                              ],
+                              "Resource": {"Fn::GetAtt" : ["WordsTable", "Arn"]}
+                        }
+                      ]
+                    }
+                }
+            ]
+        }
+    },
+    "WordsTable" : {
+        "Type": "AWS::DynamoDB::Table",
+        "Properties" : {
+            "TableName" : "WordsTable",
+            "AttributeDefinitions" : [
+                { "AttributeName": "Word", "AttributeType" : "S"}
+            ],
+            "KeySchema" : [
+                {"AttributeName": "Word", "KeyType" : "HASH"}
+            ],
+            "ProvisionedThroughput" : {
+                "ReadCapacityUnits" : "10",
+                "WriteCapacityUnits" : "10"
+            }
+        }
+    }   
   },
   "Outputs": {
     "ApiURL": {

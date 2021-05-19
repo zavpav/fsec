@@ -33,31 +33,56 @@ namespace CheckProfanityAwsLambda
             return result;
         }
 
-        /// <summary> Internal executing (extract parameters and workaround code) </summary>
-        private async Task<APIGatewayProxyResponse> InternalExecute(APIGatewayProxyRequest request,
-            Func<string, Task<BasketEditResult>> executeFunc)
+        /// <summary> Endpoint for the words list </summary>
+        public async Task<APIGatewayProxyResponse> BasketListWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            if (request.PathParameters != null
-                && request.PathParameters.ContainsKey("word")
-            )
-            {
-                var word = request.PathParameters["word"];
-                var result = await executeFunc(word);
-
-                return new APIGatewayProxyResponse
-                {
-                    StatusCode = result.Result == BasketEditResult.EnumResult.Ok
-                        ? (int) HttpStatusCode.OK
-                        : (int) HttpStatusCode.InternalServerError,
-                    Body = JsonConvert.SerializeObject(result)
-                };
-            }
+            var list = await this.Basket.GetProfanityWordList();
+            var result = string.Join(", ", list);
 
             return new APIGatewayProxyResponse
             {
-                StatusCode = (int) HttpStatusCode.InternalServerError,
-                Body = "'word' path not found"
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = $"<result>{result}</result>"
             };
+        }
+
+
+        /// <summary> Internal executing (extract parameters and workaround code) </summary>
+        private async Task<APIGatewayProxyResponse> InternalExecute(APIGatewayProxyRequest request,
+                        Func<string, Task<BasketEditResult>> executeFunc)
+        {
+            try
+            {
+                if (request.PathParameters != null
+                    && request.PathParameters.ContainsKey("word")
+                )
+                {
+                    var word = request.PathParameters["word"];
+                    var result = await executeFunc(word);
+
+                    return new APIGatewayProxyResponse
+                    {
+                        StatusCode = result.Result == BasketEditResult.EnumResult.Ok
+                            ? (int)HttpStatusCode.OK
+                            : (int)HttpStatusCode.InternalServerError,
+                        Body = JsonConvert.SerializeObject(result)
+                    };
+                }
+
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    Body = "'word' path not found"
+                };
+            }
+            catch (Exception e)
+            {
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    Body = "Exception " + e.Message + "\n" + e.ToString()
+                };
+            }
         }
     }
 }

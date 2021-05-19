@@ -73,13 +73,12 @@ namespace ProfanityList.WordList
             };
         }
 
-
         public async Task<BasketEditResult> Remove(string word)
         {
             var normWord = this.NormalizeWord(word);
             var isExists = await this.IsExists(word);
 
-            if (isExists)
+            if (!isExists)
             {
                 return new BasketEditResult
                 {
