@@ -23,15 +23,13 @@ namespace CheckProfanityKrestel.Lib
         protected override Task InternalAdd(string normalizedWord)
         {
             _wordList.Add(normalizedWord);
-            var tcs = new TaskCompletionSource<BasketEditResult>();
-            return tcs.Task;
+            return Task.CompletedTask;
         }
 
         protected override Task InternalRemove(string normalizedWord)
         {
             _wordList.Remove(normalizedWord);
-            var tcs = new TaskCompletionSource<BasketEditResult>();
-            return tcs.Task;
+            return Task.CompletedTask;
         }
     }
 }
