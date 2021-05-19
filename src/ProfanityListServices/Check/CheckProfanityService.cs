@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ProfanityList.WordList;
 
 namespace ProfanityList.Check
@@ -24,7 +25,7 @@ namespace ProfanityList.Check
         /// <param name="inputStream">Income text in UTF-8 encoding</param>
         /// <param name="exectionDetail">Required execution detalization</param>
         /// <returns>Information about checking the inputStream text</returns>
-        public CheckProfanityResult CheckProfanity(Stream inputStream, EnumExecuteDetail exectionDetail)
+        public async Task<CheckProfanityResult> CheckProfanity(Stream inputStream, EnumExecuteDetail exectionDetail)
         {
             var executeSw = Stopwatch.StartNew();
             
@@ -49,7 +50,7 @@ namespace ProfanityList.Check
             
             try
             {
-                var profanities = this.GetProfanitiesList();
+                var profanities = await this.GetProfanitiesList();
                 result.ProfanityMessagesCount = profanities.Count;
 
                 if (exectionDetail == EnumExecuteDetail.AnyResult)
@@ -145,9 +146,9 @@ namespace ProfanityList.Check
         }
 
         /// <summary> Take Profanities </summary>
-        private IReadOnlyCollection<string> GetProfanitiesList()
+        private async Task<IReadOnlyCollection<string>> GetProfanitiesList()
         {
-            return this.ProfanityListService.GetProfanityWordList();
+            return await this.ProfanityListService.GetProfanityWordList();
         }
     }
 }

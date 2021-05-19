@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProfanityList.WordList
 {
@@ -9,13 +10,13 @@ namespace ProfanityList.WordList
     {
         /// <summary> Return all registred words </summary>
         /// <returns></returns>
-        IReadOnlyCollection<string> GetProfanityWordList();
+        Task<IReadOnlyCollection<string>> GetProfanityWordList();
 
         /// <summary> Add word into the basket </summary>
-        BasketEditResult Add(string word);
+        Task<BasketEditResult> Add(string word);
 
         /// <summary> Remove word into the basket </summary>
-        BasketEditResult Remove(string word);
+        Task<BasketEditResult> Remove(string word);
 
     }
 }

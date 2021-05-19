@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ProfanityList.WordList
 {
     public abstract class ProfanityListServiceBase : IProfanityListService
     {
         /// <summary> Internal list of words </summary>
-        protected abstract IReadOnlyCollection<string> InternalCollection();
+        protected abstract Task<IReadOnlyCollection<string>> InternalCollection();
 
         /// <summary> Internal word adding </summary>
-        protected abstract void InternalAdd(string normalizedWord);
+        protected abstract Task InternalAdd(string normalizedWord);
 
         /// <summary> Internal word removing </summary>
-        protected abstract void InternalRemove(string normalizedWord);
+        protected abstract Task InternalRemove(string normalizedWord);
 
         /// <summary> Normalized word already added </summary>
-        private bool IsExists(string normalizeWord)
+        private async Task<bool> IsExists(string normalizeWord)
         {
-            return this.InternalCollection().Contains(normalizeWord);
+            var words = await this.InternalCollection();
+            return words.Contains(normalizeWord);
         }
 
         /// <summary> Normalize word </summary>
@@ -28,16 +30,16 @@ namespace ProfanityList.WordList
         }
 
         /// <summary> List of words </summary>
-        public IReadOnlyCollection<string> GetProfanityWordList()
+        public Task<IReadOnlyCollection<string>> GetProfanityWordList()
         {
             return InternalCollection();
         }
 
         /// <summary> Adding word </summary>
-        public BasketEditResult Add(string word)
+        public async Task<BasketEditResult> Add(string word)
         {
             var normWord = this.NormalizeWord(word);
-            var isExists = this.IsExists(word);
+            var isExists = await this.IsExists(word);
 
             if (isExists)
             {
@@ -51,7 +53,7 @@ namespace ProfanityList.WordList
 
             try
             {
-                this.InternalAdd(normWord);
+                await this.InternalAdd(normWord);
             }
             catch (Exception e)
             {
@@ -72,10 +74,10 @@ namespace ProfanityList.WordList
         }
 
 
-        public BasketEditResult Remove(string word)
+        public async Task<BasketEditResult> Remove(string word)
         {
             var normWord = this.NormalizeWord(word);
-            var isExists = this.IsExists(word);
+            var isExists = await this.IsExists(word);
 
             if (isExists)
             {
@@ -89,7 +91,7 @@ namespace ProfanityList.WordList
 
             try
             {
-                this.InternalRemove(normWord);
+                await this.InternalRemove(normWord);
             }
             catch (Exception e)
             {

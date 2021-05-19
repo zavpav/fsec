@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ProfanityList.WordList;
 
 namespace CheckProfanityKrestel.Lib
@@ -12,19 +13,25 @@ namespace CheckProfanityKrestel.Lib
             this._wordList = new List<string>();
         }
 
-        protected override IReadOnlyCollection<string> InternalCollection()
+        protected override Task<IReadOnlyCollection<string>> InternalCollection()
         {
-            return _wordList;
+            var tcs = new TaskCompletionSource<IReadOnlyCollection<string>>();
+            tcs.SetResult(this._wordList);
+            return tcs.Task;
         }
 
-        protected override void InternalAdd(string normalizedWord)
+        protected override Task InternalAdd(string normalizedWord)
         {
             _wordList.Add(normalizedWord);
+            var tcs = new TaskCompletionSource<BasketEditResult>();
+            return tcs.Task;
         }
 
-        protected override void InternalRemove(string normalizedWord)
+        protected override Task InternalRemove(string normalizedWord)
         {
             _wordList.Remove(normalizedWord);
+            var tcs = new TaskCompletionSource<BasketEditResult>();
+            return tcs.Task;
         }
     }
 }

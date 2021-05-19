@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ProfanityList;
+using System.Threading.Tasks;
 using ProfanityList.WordList;
 
 namespace CheckProfanity.Tests
@@ -13,29 +13,39 @@ namespace CheckProfanity.Tests
             this._list = profanityWords;
         }
 
-        public IReadOnlyCollection<string> GetProfanityWordList()
+        public Task<IReadOnlyCollection<string>> GetProfanityWordList()
         {
-            return this._list;
+            var tcs = new TaskCompletionSource<IReadOnlyCollection<string>>();
+            tcs.SetResult(this._list);
+            return tcs.Task;
         }
 
-        public BasketEditResult Add(string word)
+        public Task<BasketEditResult> Add(string word)
         {
-            return new BasketEditResult
-            {
-                Result = BasketEditResult.EnumResult.Ok,
-                Word = word,
-                Description = "Test"
-            };
+            var tcs = new TaskCompletionSource<BasketEditResult>();
+            tcs.SetResult(
+                new BasketEditResult
+                {
+                    Result = BasketEditResult.EnumResult.Ok,
+                    Word = word,
+                    Description = "Test"
+                }
+            );
+            return tcs.Task;
         }
 
-        public BasketEditResult Remove(string word)
+        public Task<BasketEditResult> Remove(string word)
         {
-            return new BasketEditResult
-            {
-                Result = BasketEditResult.EnumResult.Ok,
-                Word = word,
-                Description = "Test"
-            };
+            var tcs = new TaskCompletionSource<BasketEditResult>();
+            tcs.SetResult(
+                new BasketEditResult
+                {
+                    Result = BasketEditResult.EnumResult.Ok,
+                    Word = word,
+                    Description = "Test"
+                }
+            );
+            return tcs.Task;
         }
     }
 }

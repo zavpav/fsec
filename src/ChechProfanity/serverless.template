@@ -106,8 +106,15 @@
     "ApiURL": {
       "Description": "API endpoint URL for Prod environment",
       "Value": {
-        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Profanity/"
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
       }
+    },
+    "ProffanityS3Backet": {
+      "Value": {
+        "Ref": "ProffanityS3Backet"
+      },
+      "Description": "Bucket that will invoke the lambda function when new objects are created."
     }
+
   }
 }

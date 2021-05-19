@@ -40,7 +40,7 @@ namespace CheckProfanityKrestel.Controllers
 
             var ms = new MemoryStream(buf);
 
-            return service.CheckProfanity(ms, exectionDetail);
+            return await service.CheckProfanity(ms, exectionDetail);
         }
     }
 }

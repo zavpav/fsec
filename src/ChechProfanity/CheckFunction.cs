@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json;
@@ -17,7 +17,7 @@ namespace CheckProfanityAwsLambda
     public class CheckFunction
     {
         /// <summary> Profanity words checker </summary>
-        public APIGatewayProxyResponse CheckProfanityHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        public async Task<APIGatewayProxyResponse> CheckProfanityHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace CheckProfanityAwsLambda
                 var buf = Encoding.UTF8.GetBytes(request.Body);
                 var ms = new MemoryStream(buf);
 
-                var result = service.CheckProfanity(ms, exectionDetail);
+                var result = await service.CheckProfanity(ms, exectionDetail);
 
                 return new APIGatewayProxyResponse
                 {
@@ -79,13 +79,18 @@ namespace CheckProfanityAwsLambda
 
         }
 
-        public APIGatewayProxyResponse HealthHandle(ILambdaContext context)
+        /// <summary> Simple healthchecking </summary>
+        public Task<APIGatewayProxyResponse> HealthHandle(ILambdaContext context)
         {
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = "OK"
-            };
+            var tcs = new TaskCompletionSource<APIGatewayProxyResponse>();
+            tcs.SetResult(
+                new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Body = "OK"
+                }
+            );
+            return tcs.Task;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProfanityList.WordList;
 
@@ -17,23 +18,23 @@ namespace CheckProfanityKrestel.Controllers
         [HttpGet]
         [Route("[controller]")]
         [Route("[controller]/[action]")]
-        public IEnumerable<string> List()
+        public async Task<IEnumerable<string>> List()
         {
-            return this.Basket.GetProfanityWordList();
+            return await this.Basket.GetProfanityWordList();
         }
 
         [Route("[controller]/[action]/{word}")]
         [Produces("application/json")]
-        public BasketEditResult Add(string word)
+        public async Task<BasketEditResult> Add(string word)
         {
-            return this.Basket.Add(word);
+            return await this.Basket.Add(word);
         }
 
         [Route("[controller]/[action]/{word}")]
         [Produces("application/json")]
-        public BasketEditResult Remove(string word)
+        public async Task<BasketEditResult> Remove(string word)
         {
-            return this.Basket.Remove(word);
+            return await this.Basket.Remove(word);
         }
     }
 }

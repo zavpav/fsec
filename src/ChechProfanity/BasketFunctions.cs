@@ -2,6 +2,7 @@
 
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json;
@@ -19,27 +20,29 @@ namespace CheckProfanityAwsLambda
         }
         
         /// <summary> Endpoint for add word </summary>
-        public APIGatewayProxyResponse BasketAddWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        public async Task<APIGatewayProxyResponse> BasketAddWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            return InternalExecute(request, this.Basket.Add);
+            var result = await InternalExecute(request, this.Basket.Add);
+            return result;
         }
 
         /// <summary> Endpoint for remove word </summary>
-        public APIGatewayProxyResponse BasketRemoveWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        public async Task<APIGatewayProxyResponse> BasketRemoveWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            return InternalExecute(request, this.Basket.Remove);
+            var result = await InternalExecute(request, this.Basket.Remove);
+            return result;
         }
 
         /// <summary> Internal executing (extract parameters and workaround code) </summary>
-        private APIGatewayProxyResponse InternalExecute(APIGatewayProxyRequest request,
-            Func<string, BasketEditResult> executeFunc)
+        private async Task<APIGatewayProxyResponse> InternalExecute(APIGatewayProxyRequest request,
+            Func<string, Task<BasketEditResult>> executeFunc)
         {
             if (request.PathParameters != null
                 && request.PathParameters.ContainsKey("word")
             )
             {
                 var word = request.PathParameters["word"];
-                var result = executeFunc(word);
+                var result = await executeFunc(word);
 
                 return new APIGatewayProxyResponse
                 {
