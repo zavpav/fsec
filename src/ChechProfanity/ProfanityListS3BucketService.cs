@@ -13,7 +13,7 @@ namespace CheckProfanityAwsLambda
     public class ProfanityListS3BucketService : ProfanityListServiceBase
     {
 
-        IAmazonS3 S3Client { get; set; }
+        IAmazonS3 S3Client { get; }
         
         public ProfanityListS3BucketService()
         {

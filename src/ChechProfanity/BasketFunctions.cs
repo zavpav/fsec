@@ -12,7 +12,7 @@ namespace CheckProfanityAwsLambda
 {
     public class BasketFunctions
     {
-        private ProfanityListS3BucketService Basket { get; }
+        private IProfanityListService Basket { get; }
 
         public BasketFunctions()
         {
@@ -36,14 +36,25 @@ namespace CheckProfanityAwsLambda
         /// <summary> Endpoint for the words list </summary>
         public async Task<APIGatewayProxyResponse> BasketListWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            var list = await this.Basket.GetProfanityWordList();
-            var result = string.Join(", ", list);
-
-            return new APIGatewayProxyResponse
+            try
             {
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = $"<result>{result}</result>"
-            };
+                var list = await this.Basket.GetProfanityWordList();
+                var result = string.Join(", ", list);
+
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Body = $"<result>{result}</result>"
+                };
+            }
+            catch (Exception e)
+            {
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    Body = "Exception " + e.Message + "\n" + e.ToString()
+                };
+            }
         }
 
 
