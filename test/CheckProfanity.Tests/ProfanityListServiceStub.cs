@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProfanityList.WordList;
+using Serilog;
 
 namespace CheckProfanity.Tests
 {
@@ -18,6 +19,10 @@ namespace CheckProfanity.Tests
             var tcs = new TaskCompletionSource<IReadOnlyCollection<string>>();
             tcs.SetResult(this._list);
             return tcs.Task;
+        }
+
+        public void SetLogger(ILogger? logger)
+        {
         }
 
         public Task<BasketEditResult> Add(string word)

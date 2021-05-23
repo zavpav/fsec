@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Serilog;
+#nullable enable
 
 namespace ProfanityList.WordList
 {
@@ -8,6 +10,9 @@ namespace ProfanityList.WordList
     /// </summary>
     public interface IProfanityListService
     {
+        /// <summary> Set logger if needs </summary>
+        void SetLogger(ILogger? logger);
+
         /// <summary> Return all registred words </summary>
         Task<IReadOnlyCollection<string>> GetProfanityWordList();
 

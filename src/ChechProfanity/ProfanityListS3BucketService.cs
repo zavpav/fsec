@@ -12,7 +12,6 @@ namespace CheckProfanityAwsLambda
 {
     public class ProfanityListS3BucketService : ProfanityListServiceBase
     {
-
         IAmazonS3 S3Client { get; }
         
         public ProfanityListS3BucketService()
@@ -25,7 +24,7 @@ namespace CheckProfanityAwsLambda
             this.S3Client = s3Client;
         }
 
-        private List<string> _contentCache = null;
+        private List<string>? _contentCache = null;
 
         protected override async Task<IReadOnlyCollection<string>> InternalCollection()
         {
@@ -53,11 +52,14 @@ namespace CheckProfanityAwsLambda
                 }
             }
 
-            return this._contentCache;
+            return this._contentCache ?? new List<string>();
         }
 
         private async Task SaveCollection()
         {
+            if (_contentCache == null)
+                throw new Exception("Impossible exception. Cache is not initialized");
+
             var xDoc = new XElement("root");
             foreach (var word in _contentCache)
                 xDoc.Add(new XElement("word", word));
@@ -87,6 +89,8 @@ namespace CheckProfanityAwsLambda
             // Code has atomicity problem but I don't want check it now.
 
             await this.InternalCollection();
+            if (_contentCache == null)
+                throw new Exception("Impossible exception. Cache is not initialized");
             this._contentCache.Add(normalizedWord);
             await this.SaveCollection();
 
@@ -97,6 +101,8 @@ namespace CheckProfanityAwsLambda
             // Code has atomicity problem but I don't want check it now.
 
             await this.InternalCollection();
+            if (_contentCache == null)
+                throw new Exception("Impossible exception. Cache is not initialized");
             this._contentCache.Remove(normalizedWord);
             await this.SaveCollection();
         }

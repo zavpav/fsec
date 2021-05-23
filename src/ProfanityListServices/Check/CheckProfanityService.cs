@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ProfanityList.WordList;
+using Serilog;
 
 namespace ProfanityList.Check
 {
@@ -16,9 +17,13 @@ namespace ProfanityList.Check
 
         private IProfanityListService ProfanityListService { get; set; }
 
-        public CheckProfanityService(IProfanityListService profanityListService)
+        private ILogger? _logger;
+
+        public CheckProfanityService(IProfanityListService profanityListService, ILogger? logger)
         {
+            this._logger = logger;
             this.ProfanityListService = profanityListService;
+            this.ProfanityListService.SetLogger(logger);
         }
 
         /// <summary> Profanity words checker </summary>
@@ -31,6 +36,8 @@ namespace ProfanityList.Check
             
             if (inputStream.Length > this.MAX_FILE_LEN)
             {
+                this._logger?.Error("File too long");
+
                 return new CheckProfanityResult
                 {
                     Decsription = "Text too long",
@@ -50,6 +57,7 @@ namespace ProfanityList.Check
             
             try
             {
+                this._logger?.Information("CheckProfanity started with " + exectionDetail);
                 var profanities = await this.GetProfanitiesList();
                 result.ProfanityMessagesCount = profanities.Count;
 
@@ -93,7 +101,7 @@ namespace ProfanityList.Check
                 else if (result.ResultStatus == EnumResultStatus.TextHasProfanity)
                     result.Decsription = "Text has profanity";
                 else
-                    throw new NotSupportedException("Somthing worng");
+                    throw new NotSupportedException("Something worng");
 
                 result.ExecutionTime = executeSw.Elapsed;
             }
@@ -139,6 +147,8 @@ namespace ProfanityList.Check
                 var sw = Stopwatch.StartNew();
                 var reProfanity = new Regex(@"\b" + profanity + @"\b");
                 var profanityCount = reProfanity.Matches(fullText).Count;
+                this._logger?.Information("Check word: {Word}. Time: {Time}. Founded Count: {IsFoundCount}", 
+                    profanity, sw.Elapsed, profanityCount);
                 checkInfos.Add(new CheckLogInfo { Profanity = profanity, Count = profanityCount, CheckTime = sw.Elapsed });
             }
 

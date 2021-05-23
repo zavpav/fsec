@@ -19,9 +19,8 @@ namespace CheckProfanity.Tests
         [Fact]
         public async void TestHasProfanityVerbosityResult()
         {
-            var context = new TestLambdaContext();
             var profanityList = new ProfanityListServiceStub(new List<string> { "ah", "oh", "eh" });
-            var function = new CheckProfanityService(profanityList);
+            var function = new CheckProfanityService(profanityList, null);
 
             var errText = "ah oh uh oh";
             var stream = this.GetStream(errText);
@@ -38,7 +37,7 @@ namespace CheckProfanity.Tests
 
             var context = new TestLambdaContext();
             var profanityList = new ProfanityListServiceStub(new List<string> { "ah", "oh", "eh" });
-            var function = new CheckProfanityService(profanityList);
+            var function = new CheckProfanityService(profanityList, null);
 
             var errText = "ah oh uh oh";
             var stream = this.GetStream(errText);
@@ -62,39 +61,5 @@ namespace CheckProfanity.Tests
             stream.Position = 0;
             return stream;
         }
-
-
-        [Fact]
-        public async void TestGetMethod()
-        {
-            TestLambdaContext context;
-            APIGatewayProxyResponse response;
-
-            CheckFunction functions = new CheckFunction();
-
-            context = new TestLambdaContext();
-
-
-            //APIGatewayProxyRequest request;
-            //request = new APIGatewayProxyRequest();
-            //            response = functions.HealthHandle(request, context);
-            response = await functions.HealthHandle(context);
-            Assert.Equal(200, response.StatusCode);
-            Assert.Equal("Hello AWS Serverless", response.Body);
-        }
-
-        [Fact]
-        public async void TestEmptyBucket()
-        {
-            IAmazonS3 s3Client = new AmazonS3Client(RegionEndpoint.USEast1);
-
-            //var bucketName = "profanity.storage";
-            //await s3Client.PutBucketAsync(bucketName);
-
-            var s3Bucket = new ProfanityListS3BucketService(s3Client);
-            await s3Bucket.Add("asdf");
-
-        }
-
     }
 }

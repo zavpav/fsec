@@ -178,8 +178,31 @@
                         }
                       ]
                     }
+                },
+                {
+                    "PolicyName": "Logs",
+                    "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "logs:*"
+                                ],
+                                "Resource": [{"Fn::GetAtt" : ["WatchLogGroup", "Arn"]}]
+                            }
+                        ]
+                    }
                 }
             ]
+        }
+    },
+    "WatchLogGroup": {
+        "Type" : "AWS::Logs::LogGroup",
+        "DeletionPolicy" : "Delete",
+        "Properties":{
+            "LogGroupName": "Serilog",
+            "RetentionInDays": "7"
         }
     },
     "WordsTable" : {

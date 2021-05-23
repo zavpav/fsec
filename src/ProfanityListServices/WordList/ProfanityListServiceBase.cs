@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace ProfanityList.WordList
 {
@@ -34,6 +36,13 @@ namespace ProfanityList.WordList
             return InternalCollection();
         }
 
+
+        private ILogger? _logger;
+        public void SetLogger(ILogger? logger)
+        {
+            this._logger = logger;
+        }
+
         public async Task<BasketEditResult> Add(string word)
         {
             var normWord = this.NormalizeWord(word);
@@ -51,10 +60,14 @@ namespace ProfanityList.WordList
 
             try
             {
+                var sw = Stopwatch.StartNew();
                 await this.InternalAdd(normWord);
+                this._logger?.Information("Add word {Word} Time {Time}", word, sw.Elapsed);
             }
             catch (Exception e)
             {
+                this._logger?.Information(e, "Error adding word {Word}", word);
+
                 return new BasketEditResult
                 {
                     Result = BasketEditResult.EnumResult.Error,
@@ -88,10 +101,13 @@ namespace ProfanityList.WordList
 
             try
             {
+                var sw = Stopwatch.StartNew();
                 await this.InternalRemove(normWord);
+                this._logger?.Information("Remove word {Word} Time {Time}", word, sw.Elapsed);
             }
             catch (Exception e)
             {
+                this._logger?.Information(e, "Error removing word {Word}", word);
                 return new BasketEditResult
                 {
                     Result = BasketEditResult.EnumResult.Error,

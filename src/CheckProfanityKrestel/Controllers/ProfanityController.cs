@@ -33,7 +33,7 @@ namespace CheckProfanityKrestel.Controllers
         public async Task<CheckProfanityResult> Post(EnumExecuteDetail exectionDetail)
         {
             var profanityList = new ProfanityListInMemoryService();
-            var service = new CheckProfanityService(profanityList);
+            var service = new CheckProfanityService(profanityList, null);
             
             byte[] buf = new byte[(int)Request.ContentLength.Value];
             await Request.Body.ReadAsync(buf, 0, (int)Request.ContentLength.Value);

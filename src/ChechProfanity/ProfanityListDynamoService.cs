@@ -8,6 +8,7 @@ using ProfanityList.WordList;
 
 namespace CheckProfanityAwsLambda
 {
+    /// <summary> It service doesn't remove word </summary>
     public class ProfanityListDynamoService : ProfanityListServiceBase
     {
         public ProfanityListDynamoService()
@@ -55,6 +56,8 @@ namespace CheckProfanityAwsLambda
         protected override async Task InternalRemove(string normalizedWord)
         {
             // Code has atomicity problem but I don't want check it now.
+
+            // It doesn't remove word
 
             var words = (await this.InternalCollection()).ToList();
             words.Remove(normalizedWord);

@@ -8,6 +8,12 @@
             Error
         }
 
+        public BasketEditResult()
+        {
+            this.Word = "";
+            this.Description = "";
+        }
+
         public EnumResult Result { get; set; }
 
         public string Word { get; set; }

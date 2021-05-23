@@ -11,6 +11,7 @@ namespace ProfanityList.Check
             this.ResultStatus = EnumResultStatus.Undef;
             this.ProfanityMessagesCount = -1;
             this.CheckingLog = new List<CheckLogInfo>();
+            this.Decsription = "";
         }
 
         /// <summary> Status </summary>

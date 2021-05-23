@@ -5,6 +5,11 @@ namespace ProfanityList.Check
     /// <summary> Information during check </summary>
     public class CheckLogInfo
     {
+        public CheckLogInfo()
+        {
+            this.Profanity = "";
+        }
+
         /// <summary> "Word" </summary>
         public string Profanity { get; set; }
 

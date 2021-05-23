@@ -19,14 +19,16 @@ namespace CheckProfanityAwsLambda
         /// <summary> Profanity words checker </summary>
         public async Task<APIGatewayProxyResponse> CheckProfanityHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {
+            var logger = LambdaLoggerExtension.TryCreateSerilogLogger();
+
             try
             {
                 var profanityList = new ProfanityListS3BucketService();
-                var service = new CheckProfanityService(profanityList);
+                var service = new CheckProfanityService(profanityList, logger);
 
                 var exectionDetail = EnumExecuteDetail.CountResult;
                 if (request.MultiValueQueryStringParameters != null
-                        && request.MultiValueQueryStringParameters.ContainsKey("exectionDetail")
+                    && request.MultiValueQueryStringParameters.ContainsKey("exectionDetail")
                 )
                 {
                     var executionDetailStr = request
@@ -55,13 +57,15 @@ namespace CheckProfanityAwsLambda
                 {
                     StatusCode = result.ResultStatus == EnumResultStatus.TextIsOk
                                  || result.ResultStatus == EnumResultStatus.TextHasProfanity
-                        ? (int)HttpStatusCode.OK
-                        : (int)HttpStatusCode.InternalServerError,
+                        ? (int) HttpStatusCode.OK
+                        : (int) HttpStatusCode.InternalServerError,
                     Body = JsonConvert.SerializeObject(result)
                 };
             }
             catch (ParseRequestException e)
             {
+                logger?.Error(e, "Request exception");
+
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = (int) HttpStatusCode.BadRequest,
@@ -70,11 +74,17 @@ namespace CheckProfanityAwsLambda
             }
             catch (Exception e)
             {
+                logger?.Error(e, "Undefined exception");
+
                 return new APIGatewayProxyResponse
                 {
-                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    StatusCode = (int) HttpStatusCode.InternalServerError,
                     Body = e.Message
                 };
+            }
+            finally
+            {
+                logger?.TryDispose();
             }
 
         }
