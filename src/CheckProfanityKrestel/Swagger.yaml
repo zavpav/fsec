@@ -1,0 +1,207 @@
+swagger: "2.0"
+info:
+  title: "Service of checking profanity"
+  description: "Service of checking profanity"
+  version: "1.0.0"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+schemes:
+  - http
+host: "localhost:5000"
+basePath: "/"
+paths:
+  /Profanity:
+    get:
+      tags:
+      - Checking service
+      summary: Function of checking health
+      description: Function of checking health
+      consumes:
+      - text
+      produces:
+      - text
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: string
+    post:
+      tags:
+      - Checking service
+      summary: Function of checking profanity
+      description: Function of checking profanity
+      operationId: Check
+      produces:
+      - application/json
+      parameters:
+      - name: exectionDetail
+        in: query
+        type: string
+        description: | 
+            Required execute detail
+            * Default - Default value is 'AnyResult'
+            * AnyResult - Returns only 'Yes/No' result
+            * CountResult - Returns 'Yes/No' result and count of banned words
+            * Detailed - Returns addntion information about founded words
+            * Verbosity - Returns addntion information about all words in 'black list'
+        default: AnyResult
+        enum:
+        - Default
+        - AnyResult
+        - CountResult
+        - Detailed
+        - Verbosity
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            items:
+              $ref: "#/definitions/CheckProfanityResult"
+        "500":
+          description: Invalid status value
+          schema:
+            items:
+              $ref: "#/definitions/CheckProfanityResult"
+
+  /ProfanityBasket/Add/{word}:
+    get:
+      tags:
+      - List of banned words
+      summary: Add word
+      description: Add word
+      operationId: AddWord
+      produces:
+      - application/json
+      parameters:
+      - name: word
+        in: path
+        description: Adding word
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/BasketEditResult"
+        "500":
+          description: Adding error
+          schema:
+            $ref: "#/definitions/BasketEditResult"
+  /ProfanityBasket/Remove/{word}:
+    get:
+      tags:
+      - List of banned words
+      summary: Remove word
+      description: Remove word
+      operationId: RemoveWord
+      produces:
+      - application/json
+      parameters:
+      - name: word
+        in: path
+        description: Removing word
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/BasketEditResult"
+        "500":
+          description: Removing error
+          schema:
+            $ref: "#/definitions/BasketEditResult"
+  /ProfanityBasket/List:
+    post:
+      tags:
+      - List of banned words
+      summary: List of banned words
+      description: List of banned words.
+      operationId: WordsList
+      produces:
+      - string
+      responses:
+        "200":
+          description: List of banned words
+          schema:
+              type: array
+              items:
+                type: string
+
+definitions:
+  CheckProfanityResult:
+    type: object
+    required:
+    - "Description"
+    properties:
+      ResultStatus:
+        description: Check status
+        type: string
+        example: 0
+      Decsription:
+        type: string
+        description: Description of result
+        example: Text is clear
+      VerbosityInfo:
+        type: string
+        $ref: "#/definitions/EnumExectionDetail"
+        example: 1
+      ExecutionTime:
+        type: string
+        pattern: '^\d{2}:\d{2}:\d{2}\.\d{7}'
+        example: 00:00:00.1312224
+      ProfanityMessagesCount:
+        type: integer
+        example: 1
+      CheckingLog:
+        type: array
+        items:
+          type: object
+          $ref: "#/definitions/CheckingLog"
+  CheckingLog:
+    type: object
+    properties:
+      Profanity:
+        type: string
+        example: "oh"
+      Count:
+        type: integer
+        example: "1"
+      CheckTime:
+        type: string
+        pattern: '^\d{2}:\d{2}:\d{2}\.\d{7}'
+        example: "00:00:00.1312224"
+
+  BasketEditResult:
+    type: object
+    properties:
+      result:
+        type: integer
+        description: Internal status
+        example: 0
+      word:
+        type: string
+        description: Normalized word
+        example: wrd
+      decsription:
+        type: string
+        description: Result description
+        example: Word added
+
+  EnumExectionDetail:
+    type: string
+    enum:
+      - 0 - Default
+      - 1 - AnyResult
+      - 2 - CountResult
+      - 3 - Detailed
+      - 4 - Verbosity
+
+  EnumResultStatus:
+    type: string
+    enum:
+      - 0 - Undef
+      - 1 - TextIsOk
+      - 2 - TextHasProfanity
+      - 3 - ExecuteError
