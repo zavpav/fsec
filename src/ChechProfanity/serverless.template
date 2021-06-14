@@ -20,7 +20,7 @@
           "RootGet": {
             "Type": "Api",
             "Properties": {
-              "Path": "/Check",
+              "Path": "/Check", 
               "Method": "POST"
             }
           }
@@ -118,7 +118,7 @@
     "ProffanityS3Backet" : {
       "Type" : "AWS::S3::Bucket",
       "Properties": {
-        "BucketName" : "profanity.storage"
+        "BucketName" : "profanity.storage.eu.central"
       }
     },
     "ProffanityS3BacketRole": {
@@ -153,7 +153,7 @@
                               ],
                               "Resource": [
                               {"Fn::GetAtt" : [ "ProffanityS3Backet", "Arn"]},
-                                    "arn:aws:s3:::profanity.storage/*"
+                                    "arn:aws:s3:::profanity.storage.eu.central/*"
                                 ]
                             }
                         ]

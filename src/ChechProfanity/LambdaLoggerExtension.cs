@@ -26,7 +26,7 @@ namespace CheckProfanityAwsLambda
                     LogStreamNameProvider = logStreamProvider,
                     RetryAttempts = 5
                 };
-                var amazonCloudWatchLogger = new AmazonCloudWatchLogsClient(RegionEndpoint.USEast1);
+                var amazonCloudWatchLogger = new AmazonCloudWatchLogsClient();
                 var logger = new LoggerConfiguration()
                     .MinimumLevel.Information()
                     .WriteTo.AmazonCloudWatch(serilogSinkConfig, amazonCloudWatchLogger)

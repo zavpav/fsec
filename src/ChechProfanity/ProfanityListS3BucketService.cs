@@ -16,7 +16,7 @@ namespace CheckProfanityAwsLambda
         
         public ProfanityListS3BucketService()
         {
-            this.S3Client = new AmazonS3Client(RegionEndpoint.USEast1);
+            this.S3Client = new AmazonS3Client();
         }
 
         public ProfanityListS3BucketService(IAmazonS3 s3Client)
@@ -24,7 +24,9 @@ namespace CheckProfanityAwsLambda
             this.S3Client = s3Client;
         }
 
+
         private List<string>? _contentCache = null;
+        private string _profanityStorageEuCentral = "profanity.storage.eu.central";
 
         protected override async Task<IReadOnlyCollection<string>> InternalCollection()
         {
@@ -35,7 +37,7 @@ namespace CheckProfanityAwsLambda
                     // Parallel execution problem
                     this._contentCache = new List<string>();
 
-                    var s3FileResponse = await this.S3Client.GetObjectAsync("profanity.storage", "words.list.xml");
+                    var s3FileResponse = await this.S3Client.GetObjectAsync(_profanityStorageEuCentral, "words.list.xml");
                     using var reader = new StreamReader(s3FileResponse.ResponseStream);
                     var contents = reader.ReadToEnd();
                     var xDoc = XElement.Parse(contents);
@@ -66,7 +68,7 @@ namespace CheckProfanityAwsLambda
 
             var s3FileRequest = new PutObjectRequest
             {
-                BucketName = "profanity.storage",
+                BucketName = this._profanityStorageEuCentral,
                 Key = "words.list.xml",
                 ContentBody = xDoc.ToString(),
                 ContentType = "application/xml",

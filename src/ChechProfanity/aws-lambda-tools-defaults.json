@@ -4,7 +4,7 @@
         "Checking of profanity words"
     ],
     "profile"     : "TestAws",
-    "region"      : "us-east-1",
+    "region"      : "eu-central-1",
     "configuration" : "Release",
     "framework"     : "netcoreapp3.1",
     "function-runtime" : "dotnetcore3.1",
@@ -12,7 +12,7 @@
     "function-timeout"     : 30,
     "stack-name"           : "ProfanityStack",
     "function-handler"     : "CheckProfanityAwsLambda::CheckProfanityAwsLambda.CheckFunction::CheckProfanityHandler",
-    "s3-prefix"            : "v2/",
+    "s3-prefix"            : "v3/",
     "template"             : "serverless.template",
-    "s3-bucket"            : "profanity.deploy"
+    "s3-bucket"            : "profanity.storage.eu.central"
 }
