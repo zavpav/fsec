@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ProfanityList.WordList;
 using Serilog;
@@ -7,16 +9,16 @@ namespace CheckProfanity.Tests
 {
     public class ProfanityListServiceStub : IProfanityListService
     {
-        private List<string> _list;
+        private List<WordInfo> _list;
 
         public ProfanityListServiceStub(List<string> profanityWords)
         {
-            this._list = profanityWords;
+            this._list = profanityWords.Select(x => new WordInfo(x)).ToList();
         }
 
-        public Task<IReadOnlyCollection<string>> GetProfanityWordList()
+        public Task<IReadOnlyCollection<WordInfo>> GetProfanityWordList()
         {
-            var tcs = new TaskCompletionSource<IReadOnlyCollection<string>>();
+            var tcs = new TaskCompletionSource<IReadOnlyCollection<WordInfo>>();
             tcs.SetResult(this._list);
             return tcs.Task;
         }
@@ -51,6 +53,11 @@ namespace CheckProfanity.Tests
                 }
             );
             return tcs.Task;
+        }
+
+        public Task SaveStat(string word, TimeSpan time)
+        {
+            return Task.CompletedTask;
         }
     }
 }

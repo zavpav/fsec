@@ -17,9 +17,9 @@ namespace CheckProfanityAwsLambda
 
         public BasketFunctions()
         {
-            this.Basket = new ProfanityListS3BucketService();
+            this.Basket = ProfanityListFactory.GetProfanityListService();
         }
-        
+
         /// <summary> Endpoint for add word </summary>
         public async Task<APIGatewayProxyResponse> BasketAddWordHandler(APIGatewayProxyRequest request, ILambdaContext context)
         {

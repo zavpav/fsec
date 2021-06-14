@@ -18,7 +18,7 @@ namespace CheckProfanityKrestel.Controllers
         [HttpGet]
         [Route("[controller]")]
         [Route("[controller]/[action]")]
-        public async Task<IEnumerable<string>> List()
+        public async Task<IEnumerable<WordInfo>> List()
         {
             return await this.Basket.GetProfanityWordList();
         }

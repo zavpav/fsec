@@ -23,7 +23,8 @@ namespace CheckProfanityAwsLambda
 
             try
             {
-                var profanityList = new ProfanityListS3BucketService();
+                var profanityList = ProfanityListFactory.GetProfanityListService();
+
                 var service = new CheckProfanityService(profanityList, logger);
 
                 var exectionDetail = EnumExecuteDetail.CountResult;
@@ -32,8 +33,9 @@ namespace CheckProfanityAwsLambda
                 )
                 {
                     var executionDetailStr = request
-                        .MultiValueQueryStringParameters["exectionDetail"]
-                        .FirstOrDefault();
+                            .MultiValueQueryStringParameters["exectionDetail"]
+                            .FirstOrDefault();
+
                     if (Enum.TryParse(executionDetailStr,
                         out EnumExecuteDetail val))
                     {

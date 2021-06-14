@@ -25,17 +25,17 @@ namespace CheckProfanityAwsLambda
         }
 
 
-        private List<string>? _contentCache = null;
+        private List<WordInfo>? _contentCache = null;
         private string _profanityStorageEuCentral = "profanity.storage.eu.central";
 
-        protected override async Task<IReadOnlyCollection<string>> InternalCollection()
+        protected override async Task<IReadOnlyCollection<WordInfo>> InternalCollection()
         {
             //if (this._contentCache == null)
             {
                 try
                 {
                     // Parallel execution problem
-                    this._contentCache = new List<string>();
+                    this._contentCache = new List<WordInfo>();
 
                     var s3FileResponse = await this.S3Client.GetObjectAsync(_profanityStorageEuCentral, "words.list.xml");
                     using var reader = new StreamReader(s3FileResponse.ResponseStream);
@@ -43,7 +43,7 @@ namespace CheckProfanityAwsLambda
                     var xDoc = XElement.Parse(contents);
 
                     foreach (var xElement in xDoc.Elements("word"))
-                        this._contentCache.Add(xElement.Value);
+                        this._contentCache.Add(new WordInfo(xElement.Value));
                 }
                 catch (AmazonS3Exception e) when (e.Message.Contains("The specified key does not exist"))
                 {
@@ -54,7 +54,7 @@ namespace CheckProfanityAwsLambda
                 }
             }
 
-            return this._contentCache ?? new List<string>();
+            return this._contentCache ?? new List<WordInfo>();
         }
 
         private async Task SaveCollection()
@@ -93,7 +93,7 @@ namespace CheckProfanityAwsLambda
             await this.InternalCollection();
             if (_contentCache == null)
                 throw new Exception("Impossible exception. Cache is not initialized");
-            this._contentCache.Add(normalizedWord);
+            this._contentCache.Add(new WordInfo(normalizedWord));
             await this.SaveCollection();
 
         }
@@ -105,9 +105,13 @@ namespace CheckProfanityAwsLambda
             await this.InternalCollection();
             if (_contentCache == null)
                 throw new Exception("Impossible exception. Cache is not initialized");
-            this._contentCache.Remove(normalizedWord);
+            this._contentCache.RemoveAll(x => x.NormalizeWord == normalizedWord);
             await this.SaveCollection();
         }
 
+        public override Task SaveStat(string word, TimeSpan time)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

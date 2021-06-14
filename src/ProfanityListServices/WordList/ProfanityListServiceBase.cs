@@ -10,7 +10,7 @@ namespace ProfanityList.WordList
     public abstract class ProfanityListServiceBase : IProfanityListService
     {
         /// <summary> Internal list of words </summary>
-        protected abstract Task<IReadOnlyCollection<string>> InternalCollection();
+        protected abstract Task<IReadOnlyCollection<WordInfo>> InternalCollection();
 
         /// <summary> Internal word adding </summary>
         protected abstract Task InternalAdd(string normalizedWord);
@@ -18,11 +18,14 @@ namespace ProfanityList.WordList
         /// <summary> Internal word removing </summary>
         protected abstract Task InternalRemove(string normalizedWord);
 
+        public abstract Task SaveStat(string word, TimeSpan time);
+
+
         /// <summary> Normalized word already added </summary>
         private async Task<bool> IsExists(string normalizeWord)
         {
             var words = await this.InternalCollection();
-            return words.Contains(normalizeWord);
+            return words.Any(x => x.NormalizeWord == normalizeWord);
         }
 
         /// <summary> Normalize word </summary>
@@ -31,7 +34,7 @@ namespace ProfanityList.WordList
             return word.ToLower();
         }
 
-        public Task<IReadOnlyCollection<string>> GetProfanityWordList()
+        public Task<IReadOnlyCollection<WordInfo>> GetProfanityWordList()
         {
             return InternalCollection();
         }
@@ -123,6 +126,5 @@ namespace ProfanityList.WordList
                 Description = "Word removed"
             };
         }
-
     }
 }

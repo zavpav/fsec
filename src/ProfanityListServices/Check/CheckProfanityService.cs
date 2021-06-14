@@ -121,7 +121,7 @@ namespace ProfanityList.Check
         /// <remarks>
         /// Currently executing "standart method"...  
         /// </remarks>
-        private bool FastCheckInformation(Stream inputStream, IReadOnlyCollection<string> profanities)
+        private bool FastCheckInformation(Stream inputStream, IReadOnlyCollection<WordInfo> profanities)
         {
             var result = this.CheckProfanity(inputStream, profanities, EnumExecuteDetail.AnyResult);
             var hasAnyFoundedWord = result.Any(x => x.Count != 0);
@@ -134,7 +134,7 @@ namespace ProfanityList.Check
         /// <param name="profanities">List of "words"</param>
         /// <param name="exectionDetail">Requested detail information</param>
         private List<CheckLogInfo> CheckProfanity(Stream inputStream, 
-                    IReadOnlyCollection<string> profanities, 
+                    IReadOnlyCollection<WordInfo> profanities, 
                     EnumExecuteDetail exectionDetail)
         {
             inputStream.Position = 0;
@@ -149,14 +149,14 @@ namespace ProfanityList.Check
                 var profanityCount = reProfanity.Matches(fullText).Count;
                 this._logger?.Information("Check word: {Word}. Time: {Time}. Founded Count: {IsFoundCount}", 
                     profanity, sw.Elapsed, profanityCount);
-                checkInfos.Add(new CheckLogInfo { Profanity = profanity, Count = profanityCount, CheckTime = sw.Elapsed });
+                checkInfos.Add(new CheckLogInfo { Profanity = profanity.NormalizeWord, Count = profanityCount, CheckTime = sw.Elapsed });
             }
 
             return checkInfos;
         }
 
         /// <summary> Take Profanities </summary>
-        private async Task<IReadOnlyCollection<string>> GetProfanitiesList()
+        private async Task<IReadOnlyCollection<WordInfo>> GetProfanitiesList()
         {
             return await this.ProfanityListService.GetProfanityWordList();
         }

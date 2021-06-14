@@ -210,7 +210,9 @@
         "Properties" : {
             "TableName" : "WordsTable",
             "AttributeDefinitions" : [
-                { "AttributeName": "Word", "AttributeType" : "S"}
+                { "AttributeName": "Word", "AttributeType" : "S"},
+                { "AttributeName": "Time", "AttributeType" : "N"},
+                { "AttributeName": "Cnt", "AttributeType" : "N"}
             ],
             "KeySchema" : [
                 {"AttributeName": "Word", "KeyType" : "HASH"}
