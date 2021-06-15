@@ -72,11 +72,12 @@ namespace CheckProfanityAwsLambda
             using var sqsCli = new AmazonSQSClient();
             var queueUrl = await sqsCli.GetQueueUrlAsync(new GetQueueUrlRequest("profanity-stat-queue"));
 
-            await sqsCli.SendMessageAsync(new SendMessageRequest
+            var aa = await sqsCli.SendMessageAsync(new SendMessageRequest
             {
                 QueueUrl = queueUrl.QueueUrl,
                 MessageBody = "Try  " + word
             });
+            this._logger?.Information(aa.MessageId);
         }
     }
 }

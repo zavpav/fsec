@@ -14,7 +14,7 @@
         "Description": "Main check function",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess" ],
         "Events": {
           "RootGet": {
@@ -49,6 +49,27 @@
         }
       }
     },
+    "ProcessStatEvent" : {
+      "Type" : "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "CheckProfanityAwsLambda::CheckProfanityAwsLambda.StatProcessingFunction::ProcessStatEvent",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Processing stat function",
+        "MemorySize": 256,
+        "Timeout": 3,
+        "Role": {"Fn::GetAtt" : [ "ProffanityRole", "Arn"]},
+        "Policies": [ "AWSLambda_FullAccess", "AmazonRekognitionFullAccess" ],
+        "Events": {
+            "SQSEvent": {
+                "Type": "SQS",
+                "Properties": {
+                    "Queue": {"Fn::GetAtt" : [ "SQSStat", "Arn"]}
+                }
+            }
+         }
+      }
+    },
     "BasketAddFunction" : {
       "Type" : "AWS::Serverless::Function",
       "Properties": {
@@ -58,7 +79,7 @@
         "Description": "Add word into basket",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess", "AmazonRekognitionFullAccess" ],
         "Events": {
           "RootGet": {
@@ -80,7 +101,7 @@
         "Description": "Add word into basket",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess" ],
         "Events": {
           "RootGet": {
@@ -102,7 +123,7 @@
         "Description": "List of words into basket",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role"    : {"Fn::GetAtt" : [ "ProffanityS3BacketRole", "Arn"]},
+        "Role"    : {"Fn::GetAtt" : [ "ProffanityRole", "Arn"]},
         "Policies": [ "AWSLambda_FullAccess" ],
         "Events": {
           "RootGet": {
@@ -128,7 +149,7 @@
         "BucketName" : "profanity.storage.eu.central"
       }
     },
-    "ProffanityS3BacketRole": {
+    "ProffanityRole": {
         "Type": "AWS::IAM::Role",
         "Properties": {
             "AssumeRolePolicyDocument" : {
