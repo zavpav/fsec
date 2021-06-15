@@ -111,6 +111,9 @@ namespace CheckProfanityAwsLambda
                 )
                 {
                     var word = request.PathParameters["word"];
+
+                    await this.Basket.SaveStat(word, new TimeSpan());
+
                     var result = await executeFunc(word);
 
                     return new APIGatewayProxyResponse

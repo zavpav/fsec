@@ -40,7 +40,7 @@ namespace ProfanityList.WordList
         }
 
 
-        private ILogger? _logger;
+        protected ILogger? _logger;
         public void SetLogger(ILogger? logger)
         {
             this._logger = logger;

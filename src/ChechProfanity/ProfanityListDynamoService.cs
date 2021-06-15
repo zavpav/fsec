@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.SQS;
+using Amazon.SQS.Model;
 using ProfanityList.WordList;
 
 namespace CheckProfanityAwsLambda
@@ -24,7 +27,7 @@ namespace CheckProfanityAwsLambda
                 list.Add(new WordInfo(wrdItm["Word"].S) 
                         { 
                             Count = int.Parse(wrdItm["Cnt"].N),
-                            TotalTime = TimeSpan.Parse(wrdItm["Time"].N)
+                            TotalTime = TimeSpan.Parse(wrdItm["Time"].S)
                         });
 
             return list;
@@ -62,9 +65,18 @@ namespace CheckProfanityAwsLambda
             );
         }
 
-        public override Task SaveStat(string word, TimeSpan time)
+        public override async Task SaveStat(string word, TimeSpan time)
         {
-            return Task.CompletedTask;
+            this._logger?.Information("Try queue");
+
+            using var sqsCli = new AmazonSQSClient();
+            var queueUrl = await sqsCli.GetQueueUrlAsync(new GetQueueUrlRequest("profanity-stat-queue"));
+
+            await sqsCli.SendMessageAsync(new SendMessageRequest
+            {
+                QueueUrl = queueUrl.QueueUrl,
+                MessageBody = "Try  " + word
+            });
         }
     }
 }

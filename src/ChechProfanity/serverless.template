@@ -115,6 +115,13 @@
         }
       }
     },
+    "SQSStat":{
+      "Type" : "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName" : "profanity-stat-queue",
+        "MessageRetentionPeriod" : 300
+      }
+    },
     "ProffanityS3Backet" : {
       "Type" : "AWS::S3::Bucket",
       "Properties": {
@@ -152,10 +159,25 @@
                                     "*"
                               ],
                               "Resource": [
-                              {"Fn::GetAtt" : [ "ProffanityS3Backet", "Arn"]},
+                                  {"Fn::GetAtt" : [ "ProffanityS3Backet", "Arn"]},
                                     "arn:aws:s3:::profanity.storage.eu.central/*"
                                 ]
                             }
+                        ]
+                    }
+                },
+                {
+                    "PolicyName": "SQSStat",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                        {
+                            "Action": [
+                                "sqs:*"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [{"Fn::GetAtt" : ["SQSStat", "Arn"]}]
+                        }
                         ]
                     }
                 },
@@ -182,16 +204,16 @@
                 {
                     "PolicyName": "Logs",
                     "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                            {
-                                "Effect": "Allow",
-                                "Action": [
-                                    "logs:*"
-                                ],
-                                "Resource": [{"Fn::GetAtt" : ["WatchLogGroup", "Arn"]}]
-                            }
-                        ]
+                        "Version": "2012-10-17",
+                        "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:*"
+                                    ],
+                                    "Resource": [{"Fn::GetAtt" : ["WatchLogGroup", "Arn"]}]
+                                }
+                            ]
                     }
                 }
             ]
@@ -222,7 +244,7 @@
                 "WriteCapacityUnits" : "10"
             }
         }
-    }   
+    }
   },
   "Outputs": {
     "ApiURL": {
