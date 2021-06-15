@@ -13,7 +13,7 @@ namespace CheckProfanityAwsLambda
             try
             {
                 var logger2 = LambdaLoggerExtension.TryCreateSerilogLogger();
-                logger2.Information("Parse queue");
+                logger2?.Information("Parse queue");
             }
             catch (Exception e)
             {
